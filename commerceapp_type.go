@@ -7,11 +7,11 @@ package alipay
 import "encoding/json"
 
 type CommerceAppUploadReq struct {
-	AppAuthToken string                   `json:"-"` // 可选
-	AuthToken    string                   `json:"-"` // 用户授权令牌
-	ServiceName  string                   `json:"-"` // 应用服务名称
-	TargetId     string                   `json:"-"` // 目标用户id
-	Content      CommerceAppUploadContent `json:"-"` // 服务数据
+	AppAuthToken string                   `json:"-"`            // 可选
+	AuthToken    string                   `json:"auth_token"`   // 用户授权令牌
+	ServiceName  string                   `json:"service_name"` // 应用服务名称
+	TargetId     string                   `json:"target_id"`    // 目标用户id
+	Content      CommerceAppUploadContent `json:"content"`      // 服务数据
 }
 
 type CommerceAppUploadContent struct {
@@ -39,18 +39,24 @@ func (r CommerceAppUploadReq) Params() map[string]string {
 	m["target_id"] = r.TargetId
 	jsonContent, _ := json.Marshal(r.Content)
 	m["content"] = string(jsonContent)
+	m["biz_content"] = ""
 	return m
 }
 
 type CommerceAppUploadResp struct {
 	Content struct {
-		Code    Code   `json:"code"`
-		Msg     string `json:"msg"`
-		SubCode string `json:"sub_code"`
-		SubMsg  string `json:"sub_msg"`
-		BizCode string `json:"biz_code"`
-		BizMsg  string `json:"biz_msg"`
-		Data    string `json:"data"`
-	} `json:"alipay_commerce_app_upload_response"`
+		Code    Code                      `json:"code"`
+		Msg     string                    `json:"msg"`
+		SubCode string                    `json:"sub_code"`
+		SubMsg  string                    `json:"sub_msg"`
+		BizCode string                    `json:"biz_code"`
+		BizMsg  string                    `json:"biz_msg"`
+		Data    CommerceAppUploadRespData `json:"data"`
+	} `json:"alipay_commerce_app_auth_upload_response"`
 	Sign string `json:"sign"`
+}
+
+type CommerceAppUploadRespData struct {
+	Response string `json:"response"`
+	Time     int64  `json:"time"`
 }
