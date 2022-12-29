@@ -15,7 +15,7 @@ type TradeRefundReq struct {
 }
 
 func (r TradeRefundReq) APIName() string {
-	return "alipay.merchant.order.sync"
+	return "alipay.trade.refund"
 }
 
 func (r TradeRefundReq) Params() map[string]string {
