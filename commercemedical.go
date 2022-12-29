@@ -8,3 +8,8 @@ func (c *Client) DepartmentUpload(param DepartmentUploadReq) (result *Department
 	err = c.doRequest("POST", param, &result)
 	return result, err
 }
+
+func (c *Client) HospitalUpload(param HospitalUploadReq) (result *HospitalUploadResp, err error) {
+	err = c.doRequest("POST", param, &result)
+	return result, err
+}

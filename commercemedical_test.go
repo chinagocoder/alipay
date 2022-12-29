@@ -11,11 +11,49 @@ import (
 	"testing"
 )
 
-func TestClient_DepartmentUpload(t *testing.T) {
-	t.Log("========== OrderSyncQuery ==========")
+func TestHospitalUpload(t *testing.T) {
+	t.Log("========== HospitalUpload ==========")
+	var p = alipay.HospitalUploadReq{}
+	p.IsvPid = "2088541479049757"
+	p.RequestId = "20221229100001"
+
+	p.HospitalList = append(p.HospitalList, &alipay.HospitalData{
+		HospitalName:          "北京怀柔医院",
+		HospitalId:            "100001",
+		HospitalAlias:         "怀柔医院",
+		HospitalStandardCode:  "27110001",
+		HospitalProvince:      "北京",
+		HospitalCity:          "北京市",
+		HospitalDistrict:      "怀柔区",
+		HospitalAddr:          "北京市怀柔区永泰北街9号院",
+		HospitalLgt:           "116.4133800",
+		HospitalLat:           "39.9109200",
+		HospitalType:          "公立",
+		HospitalGrade:         "三级",
+		HospitalWorkTime:      "每天0:00放7天后的号",
+		HospitalTel:           "010-60686699",
+		HospitalLogo:          "https://hryy.olancloud.com/misc/public/hospital/logo.png",
+		CountryKeyDepartment:  "",
+		ProvinceKeyDepartment: "",
+		KeyDepartment:         "",
+		HospitalOptag:         "",
+	})
+
+	r, err := json.Marshal(p)
+	fmt.Println(string(r))
+
+	rsp, err := client.HospitalUpload(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(rsp.Content)
+}
+
+func TestDepartmentUpload(t *testing.T) {
+	t.Log("========== DepartmentUpload ==========")
 	var p = alipay.DepartmentUploadReq{}
-	p.RequestId = "1111111111111"
-	p.IsvPid = "12222222222"
+	p.RequestId = "20221229200001"
+	p.IsvPid = "2088541479049757"
 	p.DepartmentList = append(p.DepartmentList, &alipay.DepartmentData{
 		DepartmentName: "妇科(主任医师)",
 		DepartmentId:   "013",
@@ -31,8 +69,4 @@ func TestClient_DepartmentUpload(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Println(rsp.Content)
-	//if rsp.Content.Code != alipay.CodeSuccess {
-	//	t.Fatal(rsp.Content.Msg, rsp.Content.SubMsg)
-	//}
-	//t.Log(rsp.Content.OrderId)
 }
