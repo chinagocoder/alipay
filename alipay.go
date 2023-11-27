@@ -13,6 +13,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
@@ -323,6 +324,7 @@ func (c *Client) doRequest(method string, param Param, result interface{}) (err 
 	}
 
 	var dataStr = string(data)
+	fmt.Println(dataStr)
 
 	var rootNodeName = strings.Replace(param.APIName(), ".", "_", -1) + kResponseSuffix
 
