@@ -1,6 +1,6 @@
 // @Title  commercemedical.go
 // @Description  医院科室信息上传接口 https://opendocs.alipay.com/pre-apis/02x1v2
-// @Author  xushuai  2022/12/20 3:10 PM
+// @Author  xushuai  2022/12/28 3:10 PM
 
 package alipay
 
