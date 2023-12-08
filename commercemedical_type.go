@@ -1,5 +1,5 @@
 // @Title  commercemedical_type.go
-// @Description  医院科室信息上传接口 https://opendocs.alipay.com/pre-apis/02x1v2
+// @Description  医疗信息
 // @Author  xushuai  2022/12/20 3:11 PM
 
 package alipay
@@ -91,5 +91,49 @@ type HospitalUploadResp struct {
 		SubMsg  string                         `json:"sub_msg"`
 		Data    CommerceDataUploadResponseData `json:"data"`
 	} `json:"alipay_commerce_medical_industrydata_hospital_upload_response"`
+	Sign string `json:"sign"`
+}
+
+type InquiryDoctorUploadReq struct {
+	AppAuthToken string               `json:"-"`                     // 可选
+	PlatformCode string               `json:"platform_code"`         // 医生执业问诊平台编码
+	OutRequestNo string               `json:"out_request_no"`        // 外部请求号
+	DoctorList   []*InquiryDoctorData `json:"doctor_list,omitempty"` // 医生列表
+}
+
+type InquiryDoctorData struct {
+	DoctorName                    string `json:"doctor_name"`                      // 医生名称
+	Gender                        string `json:"gender"`                           // 医生性别 男: MALE 女: FEMALE
+	Avatar                        string `json:"avator"`                           // 头像
+	PracticingDoctorCertificateNo string `json:"practicing_doctor_certificate_no"` // 医生执医许可证编号（医生执医许可证编号和身份证号至少填一项）
+	IdNo                          string `json:"id_no"`                            // 身份证号（医生执医许可证编号和身份证号至少填一项）
+	HospitalName                  string `json:"hospital_name"`                    // 执业医院名称
+	DepartmentName                string `json:"department_name"`                  // 医生职称 医师: PHYSICIANS 主治医师: ATTENDING_PHYSICIANS 副主任医师: DEPUTY_CHIEF_PHYSICIANS 主任医师: CHIEF_PHYSICIANS
+	Title                         string `json:"title"`                            // 科室名称
+	DoctorDesc                    string `json:"doctor_desc"`                      // 医生个人简介
+	SkilledDesc                   string `json:"skilled_desc"`                     // 医生擅长描述
+	SkilledDisease                string `json:"skilled_disease"`                  // 医生擅长疾病（多个擅长疾病时用英文逗号分隔）
+	SpecialTags                   string `json:"special_tags"`                     // 医生专业标签（多个标签时用英文逗号分隔）
+	PracticeYear                  string `json:"practice_year"`                    // 执医年限 1-5年: WITHIN_FIVE_YEARS 5-10年: WITHIN_TEN_YEARS 10年以上: OVER_TEN_YEARS
+	ChangeType                    string `json:"change_type"`                      // 变更类型 新增: INSERT 修改: UPDATE 删除: DELETE
+}
+
+func (r InquiryDoctorUploadReq) APIName() string {
+	return "alipay.commerce.medical.industrydata.inquirydoctor.upload"
+}
+
+func (r InquiryDoctorUploadReq) Params() map[string]string {
+	var m = make(map[string]string)
+	m["app_auth_token"] = r.AppAuthToken
+	return m
+}
+
+type InquiryDoctorUploadResp struct {
+	Content struct {
+		Code    Code   `json:"code"`
+		Msg     string `json:"msg"`
+		SubCode string `json:"sub_code"`
+		SubMsg  string `json:"sub_msg"`
+	} `json:"alipay_commerce_medical_industrydata_inquirydoctor_upload_response"`
 	Sign string `json:"sign"`
 }
