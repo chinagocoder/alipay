@@ -108,8 +108,8 @@ type InquiryDoctorData struct {
 	PracticingDoctorCertificateNo string `json:"practicing_doctor_certificate_no"` // 医生执医许可证编号（医生执医许可证编号和身份证号至少填一项）
 	IdNo                          string `json:"id_no"`                            // 身份证号（医生执医许可证编号和身份证号至少填一项）
 	HospitalName                  string `json:"hospital_name"`                    // 执业医院名称
-	DepartmentName                string `json:"department_name"`                  // 医生职称 医师: PHYSICIANS 主治医师: ATTENDING_PHYSICIANS 副主任医师: DEPUTY_CHIEF_PHYSICIANS 主任医师: CHIEF_PHYSICIANS
-	Title                         string `json:"title"`                            // 科室名称
+	DepartmentName                string `json:"department_name"`                  // 执业医院科室
+	Title                         string `json:"title"`                            // 医生职称 医师: PHYSICIANS 主治医师: ATTENDING_PHYSICIANS 副主任医师: DEPUTY_CHIEF_PHYSICIANS 主任医师: CHIEF_PHYSICIANS
 	DoctorDesc                    string `json:"doctor_desc"`                      // 医生个人简介
 	SkilledDesc                   string `json:"skilled_desc"`                     // 医生擅长描述
 	SkilledDisease                string `json:"skilled_disease"`                  // 医生擅长疾病（多个擅长疾病时用英文逗号分隔）
@@ -135,5 +135,104 @@ type InquiryDoctorUploadResp struct {
 		SubCode string `json:"sub_code"`
 		SubMsg  string `json:"sub_msg"`
 	} `json:"alipay_commerce_medical_industrydata_inquirydoctor_upload_response"`
+	Sign string `json:"sign"`
+}
+
+type InquiryDoctorStatusUploadReq struct {
+	AppAuthToken     string                     `json:"-"`                            // 可选
+	PlatformCode     string                     `json:"platform_code"`                // 医生执业问诊平台编码
+	DoctorStatusList []*InquiryDoctorStatusData `json:"doctor_status_list,omitempty"` // 医生列表
+}
+
+type InquiryDoctorStatusData struct {
+	MerchantDoctorId              string            `json:"merchant_doctor_id"`               // 外部平台医生id
+	PracticingDoctorCertificateNo string            `json:"practicing_doctor_certificate_no"` // 医生执医许可证编号（医生执医许可证编号和身份证号至少填一项）
+	IdNo                          string            `json:"id_no"`                            // 身份证号（医生执医许可证编号和身份证号至少填一项）
+	DoctorPlatformStatus          string            `json:"doctor_platform_status"`           // 医生平台状态 上线: ONLINE 下线: OFFLINE
+	AverageTime                   string            `json:"average_time"`                     // 平均接诊时长（单位：分钟）
+	EvaluationScore               string            `json:"evaluation_score"`                 // 医生评价分数
+	NumOfPeopleServed             string            `json:"num_of_people_served"`             // 累计咨询人次
+	InquiryChannelList            []*InquiryChannel `json:"inquiry_channel_list"`             // 问诊方式列表
+}
+
+type InquiryChannel struct {
+	InquiryType  string `json:"inquiry_type"`  // 问诊类型 咨询: FIRST_CONSULTATION 复诊: FURTHER_CONSULTATION
+	InquiryMode  string `json:"inquiry_mode"`  // 问诊方式：IMAGE_INQUIRY(图文问诊)/PHONE_INQUIRY(电话问诊)/VIDEO_INQUIRY(视频问诊)
+	InquiryPrice string `json:"inquiry_price"` // 问诊价格（中间必须有小数点，后面两位小数）
+	InquiryUrl   string `json:"inquiry_url"`   // 问诊方式对应服务链接
+}
+
+func (r InquiryDoctorStatusUploadReq) APIName() string {
+	return "alipay.commerce.medical.industrydata.inquirydoctorstatus.upload"
+}
+
+func (r InquiryDoctorStatusUploadReq) Params() map[string]string {
+	var m = make(map[string]string)
+	m["app_auth_token"] = r.AppAuthToken
+	return m
+}
+
+type InquiryDoctorStatusUploadResp struct {
+	Content struct {
+		Code    Code   `json:"code"`
+		Msg     string `json:"msg"`
+		SubCode string `json:"sub_code"`
+		SubMsg  string `json:"sub_msg"`
+	} `json:"alipay_commerce_medical_industrydata_inquirydoctorstatus_upload_response"`
+	Sign string `json:"sign"`
+}
+
+type InquiryOrderUploadReq struct {
+	AppAuthToken          string                     `json:"-"`                        // 可选
+	OutBizNo              string                     `json:"out_biz_no"`               // out_biz_no，唯一，外部商户自有订单号
+	MerchantOrderStatus   string                     `json:"merchant_order_status"`    // 订单状态 待支付: WAIT_PAY 待接诊: WAIT_RECEPTION 待问诊: WAIT_INQUIRY 问诊中: IN_INQUIRY 已完成: FINISHED 已取消: CANCELED 已退款: REFUNDED 退款中: REFUNDING 取消中: CANCELING 审核失败: APPROVE_FAIL 系统取消: SYSTEM_CANCELED 用户取消: USER_CANCELED
+	OrderType             string                     `json:"order_type"`               // 固定值：INQUIRY_ORDER
+	OutBizType            string                     `json:"out_biz_type"`             // 外部订单类型 问诊订单: INQUIRY_ORDER 义诊订单: PUBLIC_WELFARE
+	Amount                string                     `json:"amount"`                   // 订单金额，精确到小数点后2位，单位为元
+	OrderCreateTime       string                     `json:"order_create_time"`        // 订单创建时间
+	OrderModifiedTime     string                     `json:"order_modified_time"`      // 订单修改时间
+	MerchantUserId        string                     `json:"merchant_user_id"`         // 平台用户id
+	AlipayUserId          string                     `json:"alipay_user_id"`           // 支付宝用户id
+	AlipayOpenId          string                     `json:"alipay_open_id"`           // 支付宝开放id
+	InquiryType           string                     `json:"inquiry_type"`             // 问诊类型 咨询: FIRST_CONSULTATION 复诊: FURTHER_CONSULTATION
+	InquiryMode           string                     `json:"inquiry_mode"`             // 问诊方式 图文问诊: IMAGE_INQUIRY 电话问诊: PHONE_INQUIRY 视频问诊: VIDEO_INQUIRY 快速图文: QUICK_IMAGE_INQUIRY 快速电话: QUICK_PHONE_INQUIRY 快速视频: QUICK_VIDEO_INQUIRY
+	ScheduledTime         string                     `json:"scheduled_time"`           // 预约问诊时间
+	MerchantOrderLinkPage string                     `json:"merchant_order_link_page"` // 订单详情页链接
+	DoctorName            string                     `json:"doctor_name"`              // 医生名称
+	MerchantDoctorId      string                     `json:"merchant_doctor_id"`       // 外部平台医生id
+	HospitalName          string                     `json:"hospital_name"`            // 医生执业医院
+	DepartmentName        string                     `json:"department_name"`          // 医生所属科室
+	PlatformCode          string                     `json:"platform_code"`            // 医生执业问诊平台编码
+	AlipayTradeNo         string                     `json:"alipay_trade_no"`          // 支付宝交易号
+	RealAmount            string                     `json:"real_amount"`              // 实际支付金额，精确到小数点后2位，单位为元
+	RefundAmount          string                     `json:"refund_amount"`            // 退款金额，精确到小数点后2位，单位为元
+	OrderHiddenFlag       string                     `json:"order_hidden_flag"`        // 订单隐藏标志，默认为N 是: Y 否: N
+	ExtInfo               MedicalInquiryOrderExtInfo `json:"ext_info"`                 // 扩展信息
+}
+
+type MedicalInquiryOrderExtInfo struct {
+	DoctorInquiryLinkPage  string `json:"doctor_inquiry_link_page"`  // 联系医生问诊链接
+	ApproveComment         string `json:"approve_comment"`           // 审核意见
+	Source                 string `json:"source"`                    // 订单来源 支付宝问诊频道: ALIPAY_INQUIRY_CHANNEL 支付宝义诊频道: ALIPAY_PUBLIC_WELFARE_INQUIRY_CHANNEL 支付宝小程序: ALIPAY_MINI_APP 支付宝其他渠道: ALIPAY_OTHER_CHANNEL
+	AlipayChannelOrderFlag string `json:"alipay_channel_order_flag"` // 支付宝渠道订单标识，Y代表支付宝渠道订单 是: Y 否: N
+}
+
+func (r InquiryOrderUploadReq) APIName() string {
+	return "alipay.commerce.medical.industrydata.inquiryorder.upload"
+}
+
+func (r InquiryOrderUploadReq) Params() map[string]string {
+	var m = make(map[string]string)
+	m["app_auth_token"] = r.AppAuthToken
+	return m
+}
+
+type InquiryOrderUploadResp struct {
+	Content struct {
+		Code    Code   `json:"code"`
+		Msg     string `json:"msg"`
+		SubCode string `json:"sub_code"`
+		SubMsg  string `json:"sub_msg"`
+	} `json:"alipay_commerce_medical_industrydata_inquiryorder_upload_response"`
 	Sign string `json:"sign"`
 }

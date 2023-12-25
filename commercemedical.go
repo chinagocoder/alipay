@@ -36,3 +36,25 @@ func (c *Client) InquiryDoctorUpload(param InquiryDoctorUploadReq) (result *Inqu
 	err = c.doRequest("POST", param, &result)
 	return result, err
 }
+
+// InquiryDoctorStatusUpload
+// @Description 专家问诊医生状态实时同步接口 https://opendocs.alipay.com/pre-apis/067w4m
+// @receiver  c
+// @param  param
+// @return  result
+// @return  err
+func (c *Client) InquiryDoctorStatusUpload(param InquiryDoctorStatusUploadReq) (result *InquiryDoctorStatusUploadResp, err error) {
+	err = c.doRequest("POST", param, &result)
+	return result, err
+}
+
+// InquiryOrderUpload
+// @Description 问诊订单回流接口 https://opendocs.alipay.com/pre-apis/067slc
+// @receiver  c
+// @param  param
+// @return  result
+// @return  err
+func (c *Client) InquiryOrderUpload(param InquiryOrderUploadReq) (result *InquiryOrderUploadResp, err error) {
+	err = c.doRequest("POST", param, &result)
+	return result, err
+}
