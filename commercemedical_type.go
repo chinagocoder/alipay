@@ -229,10 +229,13 @@ func (r InquiryOrderUploadReq) Params() map[string]string {
 
 type InquiryOrderUploadResp struct {
 	Content struct {
-		Code    Code   `json:"code"`
-		Msg     string `json:"msg"`
-		SubCode string `json:"sub_code"`
-		SubMsg  string `json:"sub_msg"`
+		Code         Code   `json:"code"`
+		Msg          string `json:"msg"`
+		SubCode      string `json:"sub_code"`
+		SubMsg       string `json:"sub_msg"`
+		ResultCode   string `json:"result_code"`
+		ErrorMessage string `json:"error_message"`
+		OrderId      string `json:"order_id"`
 	} `json:"alipay_commerce_medical_industrydata_inquiryorder_upload_response"`
 	Sign string `json:"sign"`
 }
